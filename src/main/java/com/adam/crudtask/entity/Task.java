@@ -1,9 +1,14 @@
 package com.adam.crudtask.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name="task")
+@AllArgsConstructor
+@Builder
 public class Task {
 
     //define fields

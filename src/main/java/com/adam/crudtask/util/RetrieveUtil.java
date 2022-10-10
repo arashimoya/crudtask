@@ -1,0 +1,18 @@
+package com.adam.crudtask.util;
+
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.http.HttpResponse;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+
+public class RetrieveUtil {
+    public static <T> T retrieveResourceFromResponse(HttpResponse response, Class<T> tClass)
+            throws IOException {
+        String jsonFromResponse = EntityUtils.toString(response.getEntity());
+        ObjectMapper mapper = new ObjectMapper()
+                .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+        return mapper.readValue(jsonFromResponse,tClass);
+    }
+}

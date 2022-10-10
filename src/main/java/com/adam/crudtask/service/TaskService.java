@@ -9,7 +9,7 @@ public interface TaskService {
 
     Task findById(int id);
 
-    void save(Task task);
+    Task save(Task task);
 
     void deleteById(int id);
 }

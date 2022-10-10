@@ -4,9 +4,15 @@ import com.adam.crudtask.dao.TaskDAO;
 import com.adam.crudtask.entity.Task;
 import com.adam.crudtask.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.common.exceptions.InvalidRequestException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -30,7 +36,7 @@ public class TaskRESTController {
     public Task getTask(@PathVariable int taskId){
         Task task = taskService.findById(taskId);
         if(task==null){
-            throw new RuntimeException("Employee id not found - " + taskId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Task id not found - " + taskId);
         }
         return task;
     }
@@ -48,6 +54,14 @@ public class TaskRESTController {
     //add mapping for PUT /tasks - update existing task
     @PutMapping("/tasks")
     public Task updateTask(@RequestBody Task task){
+        if(task==null || task.getId()==0){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Task or ID must not be null!");
+        }
+
+        Optional<Task> optionalTask = Optional.ofNullable(taskService.findById(task.getId()));
+        if(optionalTask.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Task with ID " + task.getId() + " does not exist.");
+        }
         taskService.save(task);
         return task;
     }
@@ -58,7 +72,7 @@ public class TaskRESTController {
         Task tempTask = taskService.findById(taskId);
 
         if(tempTask==null){
-            throw new RuntimeException("Task ID not found - " + taskId);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Task with ID " + taskId + " does not exist.");
         }
 
         taskService.deleteById(taskId);
