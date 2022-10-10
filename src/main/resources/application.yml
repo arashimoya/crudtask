@@ -11,9 +11,14 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  config:
+    #SECURITY
+    import: secrets.yml
 
 server:
   port: 2137
+
+
 
 
 
