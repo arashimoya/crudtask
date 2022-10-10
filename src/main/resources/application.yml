@@ -1,0 +1,19 @@
+# JDBC properties
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: admin
+  sql:
+    init:
+      platform: postgres
+#SWAGGER
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+server:
+  port: 2137
+
+
+
